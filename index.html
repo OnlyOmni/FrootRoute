@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrootRoute - Location Sharing Made Fun</title>
+    <meta name="description" content="Share your location with friends using fruit avatars. FrootRoute makes location sharing playful and interactive.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./assets/frootloop2_1749289712480.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles.css">
+    
+    <!-- External Libraries -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="fruit-character">
+                <div class="fruit-emoji">🍊</div>
+                <div class="fruit-animation"></div>
+            </div>
+            <h2>Loading your fruity adventure</h2>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Container -->
+    <div id="app" class="app-container" style="display: none;">
+        <!-- Landing Page -->
+        <div id="landing-page" class="page active">
+            <div class="landing-hero">
+                <div class="hero-content">
+                    <img src="./assets/frootloop2_1749289712480.png" alt="FrootRoute" class="hero-logo">
+                    <h1 class="hero-title">FrootRoute</h1>
+                    <p class="hero-subtitle">Share your location with friends using fun fruit avatars</p>
+                    
+                    <div class="hero-features">
+                        <div class="feature">
+                            <div class="feature-icon">🍎</div>
+                            <h3>Fruit Avatars</h3>
+                            <p>Express yourself with colorful fruit characters</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🗺️</div>
+                            <h3>Real-time Map</h3>
+                            <p>See friends on an interactive world map</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon">🔒</div>
+                            <h3>Privacy First</h3>
+                            <p>Control who sees your location and when</p>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-actions">
+                        <button onclick="showLogin()" class="btn btn-primary">Get Started</button>
+                        <button onclick="showSignup()" class="btn btn-secondary">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Page -->
+        <div id="login-page" class="page">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <button onclick="showLanding()" class="back-btn">←</button>
+                    <img src="./assets/frootloop2_1749289712480.png" alt="FrootRoute" class="auth-logo">
+                    <h1>Welcome Back</h1>
+                </div>
+                
+                <div class="auth-form">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" placeholder="Enter your password">
+                    </div>
+                    
+                    <button onclick="handleLogin()" class="btn btn-primary full-width">Sign In</button>
+                    
+                    <p class="auth-switch">
+                        Don't have an account? <a href="#" onclick="showSignup()">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Signup Page -->
+        <div id="signup-page" class="page">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <button onclick="showLanding()" class="back-btn">←</button>
+                    <img src="./assets/frootloop2_1749289712480.png" alt="FrootRoute" class="auth-logo">
+                    <h1>Join FrootRoute</h1>
+                </div>
+                
+                <div class="auth-form">
+                    <div class="form-group">
+                        <label for="signup-username">Username</label>
+                        <input type="text" id="signup-username" placeholder="Choose a username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" placeholder="Enter your email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" placeholder="Create a password">
+                    </div>
+                    
+                    <button onclick="handleSignup()" class="btn btn-primary full-width">Create Account</button>
+                    
+                    <p class="auth-switch">
+                        Already have an account? <a href="#" onclick="showLogin()">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard/Home Page -->
+        <div id="home-page" class="page">
+            <div class="home-container">
+                <div class="home-header">
+                    <div class="user-greeting">
+                        <h1>Welcome to FrootRoute!</h1>
+                        <p>Share your location and connect with friends</p>
+                    </div>
+                    <button onclick="showProfile()" class="profile-btn">👤</button>
+                </div>
+                
+                <div class="quick-actions">
+                    <div class="action-card" onclick="showMap()">
+                        <div class="action-icon">🗺️</div>
+                        <h3>View Map</h3>
+                        <p>See friends on the map</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showFriends()">
+                        <div class="action-icon">👥</div>
+                        <h3>Friends</h3>
+                        <p>Manage your friend list</p>
+                    </div>
+                    
+                    <div class="action-card" onclick="showBandz()">
+                        <div class="action-icon">⌚</div>
+                        <h3>FrootBand</h3>
+                        <p>Connect your bracelet</p>
+                    </div>
+                </div>
+                
+                <div class="location-status">
+                    <div class="status-card">
+                        <h3>Location Sharing</h3>
+                        <div class="status-indicator">
+                            <span class="status-dot active"></span>
+                            <span>Active</span>
+                        </div>
+                        <button onclick="showLocationSettings()" class="btn btn-secondary">Manage</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <button class="nav-item active" onclick="showHome()">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Home</span>
+                </button>
+                <button class="nav-item" onclick="showMap()">
+                    <span class="nav-icon">🗺️</span>
+                    <span class="nav-label">Map</span>
+                </button>
+                <button class="nav-item" onclick="showFriends()">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-label">Friends</span>
+                </button>
+                <button class="nav-item" onclick="showProfile()">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-label">Profile</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Map Page -->
+        <div id="map-page" class="page">
+            <div class="map-header">
+                <button onclick="showHome()" class="back-btn">←</button>
+                <h1>Friend Map</h1>
+                <button class="settings-btn">⚙️</button>
+            </div>
+            
+            <div id="map-container" class="map-container">
+                <!-- Map will be initialized here -->
+            </div>
+            
+            <div class="map-controls">
+                <button class="control-btn" onclick="centerOnUser()">📍 My Location</button>
+                <button class="control-btn" onclick="toggleLocationSharing()">🔄 Toggle Sharing</button>
+            </div>
+            
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <button class="nav-item" onclick="showHome()">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Home</span>
+                </button>
+                <button class="nav-item active" onclick="showMap()">
+                    <span class="nav-icon">🗺️</span>
+                    <span class="nav-label">Map</span>
+                </button>
+                <button class="nav-item" onclick="showFriends()">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-label">Friends</span>
+                </button>
+                <button class="nav-item" onclick="showProfile()">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-label">Profile</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile-page" class="page">
+            <div class="profile-header">
+                <button onclick="showHome()" class="back-btn">←</button>
+                <h1>Profile</h1>
+                <button onclick="showSettings()" class="settings-btn">⚙️</button>
+            </div>
+            
+            <div class="profile-content">
+                <div class="profile-info">
+                    <div class="profile-avatar">🍊</div>
+                    <h2 id="profile-username">Username</h2>
+                    <p id="profile-email">email@example.com</p>
+                </div>
+                
+                <div class="profile-actions">
+                    <button onclick="showLocationSettings()" class="btn btn-outline">Location Settings</button>
+                    <button onclick="handleLogout()" class="btn btn-danger">Sign Out</button>
+                </div>
+            </div>
+            
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <button class="nav-item" onclick="showHome()">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Home</span>
+                </button>
+                <button class="nav-item" onclick="showMap()">
+                    <span class="nav-icon">🗺️</span>
+                    <span class="nav-label">Map</span>
+                </button>
+                <button class="nav-item" onclick="showFriends()">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-label">Friends</span>
+                </button>
+                <button class="nav-item active" onclick="showProfile()">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-label">Profile</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Permission Dialog -->
+    <div id="location-dialog" class="dialog-overlay" style="display: none;">
+        <div class="dialog">
+            <div class="dialog-header">
+                <h2>Share Your Location?</h2>
+                <p>FrootRoute works best when you share your location with friends</p>
+            </div>
+            
+            <div class="dialog-content">
+                <div class="permission-step" id="permission-step-1">
+                    <div class="permission-benefits">
+                        <div class="benefit">
+                            <span class="benefit-icon">👥</span>
+                            <div>
+                                <h4>See Friends on Map</h4>
+                                <p>Find your friends nearby and share your location</p>
+                            </div>
+                        </div>
+                        <div class="benefit">
+                            <span class="benefit-icon">🔒</span>
+                            <div>
+                                <h4>Privacy Protected</h4>
+                                <p>You control who sees your location and when</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dialog-actions">
+                        <button onclick="showDurationOptions()" class="btn btn-primary full-width">Allow Location</button>
+                        <button onclick="declineLocation()" class="btn btn-outline full-width">Not Now</button>
+                    </div>
+                </div>
+                
+                <div class="permission-step" id="permission-step-2" style="display: none;">
+                    <h3>How long should we share your location?</h3>
+                    <p>You can change this anytime in your profile settings</p>
+                    
+                    <div class="duration-options">
+                        <label class="duration-option">
+                            <input type="radio" name="duration" value="1hour">
+                            <div class="option-content">
+                                <h4>1 Hour</h4>
+                                <p>Share for one hour</p>
+                            </div>
+                        </label>
+                        
+                        <label class="duration-option">
+                            <input type="radio" name="duration" value="8hours" checked>
+                            <div class="option-content">
+                                <h4>8 Hours</h4>
+                                <p>Share for the day</p>
+                            </div>
+                        </label>
+                        
+                        <label class="duration-option">
+                            <input type="radio" name="duration" value="24hours">
+                            <div class="option-content">
+                                <h4>24 Hours</h4>
+                                <p>Share for a full day</p>
+                            </div>
+                        </label>
+                        
+                        <label class="duration-option">
+                            <input type="radio" name="duration" value="until_turned_off">
+                            <div class="option-content">
+                                <h4>Until I Turn it Off</h4>
+                                <p>Keep sharing until manually disabled</p>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="dialog-actions">
+                        <button onclick="acceptLocationWithDuration()" class="btn btn-primary full-width">Start Sharing</button>
+                        <button onclick="showPermissionStep1()" class="btn btn-outline full-width">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- JavaScript -->
+    <script src="./script.js"></script>
+</body>
+</html>
